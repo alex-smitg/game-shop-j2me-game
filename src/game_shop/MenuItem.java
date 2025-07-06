@@ -6,6 +6,8 @@ public class MenuItem {
     int action = 0;
     int price = 0;
     
+    int color[] = {255, 0, 0};
+    
     
     public MenuItem(String text, int action, int price) {
         this.text = text;

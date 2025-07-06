@@ -11,4 +11,6 @@ package game_shop;
  */
 public class Prices {
     static int expand = 200;
+    static int build_checkout = 400;
+    static int build_shelf = 400;
 }

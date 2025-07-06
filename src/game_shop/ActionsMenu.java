@@ -30,14 +30,35 @@ public class ActionsMenu extends View {
             description.addElement("находится за ней...");
             description.addElement("Можно разрушать стены");
             description.addElement("для расширения магазина");
-                   
+
             menu.addItem(new MenuItem("Разрушить стену", Actions.EXPAND,
                     Prices.expand));
+        } else {
+            switch (selectedCell.type) {
+                case Types.EMPTY:
+                    text_name = "Свободное место";
+                    description.addElement("Здесь можно");
+                    description.addElement("установить оборудование");
+
+                    menu.addItem(new MenuItem("Построить кассу",
+                            Actions.BUILD_CHECKOUT,
+                            Prices.expand));
+                    menu.addItem(new MenuItem("Построить полку",
+                            Actions.BUILD_SHELF,
+                            Prices.expand));
+                    break;
+            }
         }
-        
+
         menu.position = new Vector2d(20, description.size() * 30 + 50);
 
         super.show();
+    }
+
+    void goBack() {
+        parent.changeFocusTo(parent.world);
+        parent.world.show();
+        hide();
     }
 
     void keyPressed(int keyCode) {
@@ -46,13 +67,13 @@ public class ActionsMenu extends View {
 
             if (keyCode == Keys.KEY_CENTER) {
                 MenuItem menuItem = menu.select();
-                switch (menuItem.action) {
-                    case (Actions.BACK):
-                        parent.changeFocusTo(parent.world);
-                        parent.world.show();
-                        hide();
-                        break;
-
+                if (menuItem.action == Actions.BACK) {
+                    goBack();
+                } else {
+                    if (parent.world.hasEnoughMoney(menuItem.price)) {
+                        parent.world.receiveAction(menuItem.action);
+                        goBack();
+                    }
                 }
 
             }
@@ -61,6 +82,18 @@ public class ActionsMenu extends View {
 
     void update() {
         menu.hasFocus = hasFocus;
+        for (int i = 0; i < menu.items.size(); i++) {
+            MenuItem menuItem = (MenuItem) menu.items.elementAt(i);
+            if (parent.world.hasEnoughMoney(menuItem.price)) {
+                menuItem.color[0] = 0;
+                menuItem.color[1] = 255;
+                menuItem.color[2] = 0;
+            } else {
+                menuItem.color[0] = 255;
+                menuItem.color[1] = 0;
+                menuItem.color[2] = 0;
+            }
+        }
         menu.update();
     }
 
@@ -73,6 +106,8 @@ public class ActionsMenu extends View {
             g.drawString(text_name,
                     0, 30,
                     Graphics.TOP | Graphics.LEFT);
+
+            g.setColor(255, 255, 255);
 
             for (int i = 0; i < description.size(); i++) {
                 g.drawString((String) description.elementAt(i),

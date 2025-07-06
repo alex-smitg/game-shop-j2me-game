@@ -19,9 +19,8 @@ public class World extends View {
 
     Vector cells = new Vector();
     Hashtable cells_map = new Hashtable();
-    
-    
-    int money = 100;
+
+    int money = 800;
 
     World(int width, int height, GameCanvas gameCanvas) {
         this.parent = gameCanvas;
@@ -30,24 +29,64 @@ public class World extends View {
                 height / 2 - CELL_HALF_HEIGHT)
         );
 
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 0; x++) {
+            for (int y = 0; y < 0; y++) {
                 Cell cell = new Cell();
-                cell.position.x = x * 48;
-                cell.position.y = y * 24;
+                cell.position.x = x * CELL_WIDTH;
+                cell.position.y = y * CELL_HEIGHT;
                 cells.addElement(cell);
 
-                cells_map.put(String.valueOf(x * 48) + "|" + String.valueOf(y * 24), cell);
-
+                cells_map.put(String.valueOf(x * CELL_WIDTH) +
+                        "|" + String.valueOf(y * CELL_HEIGHT), cell);
+                cell.type = Types.CHECKOUT;
                 cell = new Cell();
-                cell.position.x = x * 48 + 24;
-                cell.position.y = y * 24 + 12;
+                cell.position.x = x * CELL_WIDTH + CELL_HALF_WIDTH;
+                cell.position.y = y * CELL_HEIGHT + CELL_HALF_HEIGHT;
 
-                cells_map.put(String.valueOf(x * 48 + 24) + "|" + String.valueOf(y * 24 + 12), cell);
+                cells_map.put(String.valueOf(x * CELL_WIDTH + CELL_HALF_WIDTH) +
+                        "|" +
+                        String.valueOf(y * CELL_HEIGHT + CELL_HALF_HEIGHT), cell);
                 cells.addElement(cell);
 
             }
         }
+    }
+
+    void substractMoney(int val) {
+        money -= val;
+    }
+
+    void receiveAction(int action) {
+        switch (action) {
+            case Actions.EXPAND:
+                substractMoney(Prices.expand);
+
+                Cell cell = new Cell();
+                cell.position.x = (int) (cursor_position_index.x * CELL_HALF_WIDTH);
+                cell.position.y = (int) (cursor_position_index.y * CELL_HALF_HEIGHT);
+                cells.addElement(cell);
+                cell.type = Types.EMPTY;
+
+                cells_map.put(
+                        String.valueOf((int) cell.position.x)
+                        + "|"
+                        + String.valueOf((int) cell.position.y),
+                        cell);
+
+                break;
+            case Actions.BUILD_CHECKOUT:
+                substractMoney(Prices.build_checkout);
+                getCell().type = Types.CHECKOUT;
+                break;
+
+        }
+    }
+
+    boolean hasEnoughMoney(int money) {
+        if (this.money >= money) {
+            return true;
+        }
+        return false;
     }
 
     void keyPressed(int keyCode) {
@@ -107,14 +146,15 @@ public class World extends View {
 
     void draw(Graphics g, Images images, Font font) {
         if (visible) {
+
             for (int i = 0; i < cells.size(); i++) {
                 Cell cell = (Cell) cells.elementAt(i);
-                g.drawImage(images.cell_0,
-                        (int) (cell.position.x - camera.getPosition().x),
-                        (int) (cell.position.y - camera.getPosition().y),
-                        Graphics.TOP | Graphics.LEFT);
-            }
+                cell.drawFloor(g, images, new Vector2d(
+                        cell.position.x - camera.getPosition().x,
+                        cell.position.y - camera.getPosition().y
+                ));
 
+            }
             g.drawImage(
                     images.cell_selector,
                     (int) (cursor_position_index.x * CELL_HALF_WIDTH
@@ -122,6 +162,17 @@ public class World extends View {
                     (int) (cursor_position_index.y * CELL_HALF_HEIGHT
                     - camera.getPosition().y),
                     Graphics.TOP | Graphics.LEFT);
+
+            for (int i = 0; i < cells.size(); i++) {
+                Cell cell = (Cell) cells.elementAt(i);
+                cell.draw(g, images, new Vector2d(
+                        cell.position.x - camera.getPosition().x,
+                        cell.position.y - camera.getPosition().y),
+                        CELL_HEIGHT
+                );
+
+            }
+
         }
     }
 }
