@@ -35,7 +35,7 @@ public class Main extends javax.microedition.midlet.MIDlet implements Runnable {
 
             VolumeControl volumeControl = (VolumeControl) musicPlayer.getControl("VolumeControl");
             if (volumeControl != null) {
-                volumeControl.setLevel(100);
+                volumeControl.setLevel(80);
             }
             musicPlayer.setLoopCount(-1);
 

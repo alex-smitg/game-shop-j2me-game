@@ -3,13 +3,14 @@ package game_shop;
 import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
 public class World extends View {
 
     Vector2d cursor_position_index = new Vector2d(0, 0);
     private final Random random = new Random();
-    private Camera camera;
+    private final Camera camera;
 
     final int CELL_WIDTH = 48;
     final int CELL_HEIGHT = 24;
@@ -18,8 +19,12 @@ public class World extends View {
 
     Vector cells = new Vector();
     Hashtable cells_map = new Hashtable();
+    
+    
+    int money = 100;
 
-    World(int width, int height) {
+    World(int width, int height, GameCanvas gameCanvas) {
+        this.parent = gameCanvas;
         camera = new Camera(new Vector2d(
                 width / 2 - CELL_HALF_WIDTH,
                 height / 2 - CELL_HALF_HEIGHT)
@@ -47,52 +52,46 @@ public class World extends View {
 
     void keyPressed(int keyCode) {
         if (hasFocus) {
-            if (keyCode == KEY_RIGHT) {
+            if (keyCode == Keys.KEY_RIGHT) {
                 cursor_position_index.x += 1;
                 cursor_position_index.y += 1;
-                getCellType();
             }
 
-            if (keyCode == KEY_LEFT) {
+            if (keyCode == Keys.KEY_LEFT) {
                 cursor_position_index.y -= 1;
                 cursor_position_index.x -= 1;
-                getCellType();
             }
 
-            if (keyCode == KEY_UP) {
+            if (keyCode == Keys.KEY_UP) {
                 cursor_position_index.y -= 1;
                 cursor_position_index.x += 1;
-                getCellType();
 
             }
 
-            if (keyCode == KEY_DOWN) {
+            if (keyCode == Keys.KEY_DOWN) {
                 cursor_position_index.y += 1;
                 cursor_position_index.x -= 1;
-                getCellType();
             }
 
-//        if (keyCode == -6) { //1 UP 0
-//            if (!isWindowOpened) {
-//                isWindowOpened = true;
-//                menu_selected_index = 0;
-//            }
-//        }
-            if (keyCode == KEY_CENTER) { //center
-
+            if (keyCode == Keys.KEY_A) {
+                parent.changeFocusTo(parent.actionsMenu);
+                parent.actionsMenu.selectedCell = getCell();
+                hide();
+                parent.actionsMenu.show();
             }
+
         }
     }
 
-    public void getCellType() {
+    public Cell getCell() {
         int pos_x = (int) cursor_position_index.x * CELL_HALF_WIDTH;
         int pos_y = (int) cursor_position_index.y * CELL_HALF_HEIGHT;
         String a = String.valueOf(pos_x) + "|" + String.valueOf(pos_y);
 
         if (!cells_map.containsKey(a)) {
-            //selected_cell_type = "null";
+            return null;
         } else {
-            //selected_cell_type = "floor";
+            return (Cell) cells_map.get(a);
 
         }
 
@@ -106,21 +105,23 @@ public class World extends View {
         camera.update();
     }
 
-    void draw(Graphics g, Images images) {
-        for (int i = 0; i < cells.size(); i++) {
-            Cell cell = (Cell) cells.elementAt(i);
-            g.drawImage(images.cell_0,
-                    (int) (cell.position.x - camera.getPosition().x),
-                    (int) (cell.position.y - camera.getPosition().y),
+    void draw(Graphics g, Images images, Font font) {
+        if (visible) {
+            for (int i = 0; i < cells.size(); i++) {
+                Cell cell = (Cell) cells.elementAt(i);
+                g.drawImage(images.cell_0,
+                        (int) (cell.position.x - camera.getPosition().x),
+                        (int) (cell.position.y - camera.getPosition().y),
+                        Graphics.TOP | Graphics.LEFT);
+            }
+
+            g.drawImage(
+                    images.cell_selector,
+                    (int) (cursor_position_index.x * CELL_HALF_WIDTH
+                    - camera.getPosition().x),
+                    (int) (cursor_position_index.y * CELL_HALF_HEIGHT
+                    - camera.getPosition().y),
                     Graphics.TOP | Graphics.LEFT);
         }
-
-        g.drawImage(
-                images.cell_selector,
-                (int) (cursor_position_index.x * CELL_HALF_WIDTH
-                - camera.getPosition().x),
-                (int) (cursor_position_index.y * CELL_HALF_HEIGHT
-                - camera.getPosition().y),
-                Graphics.TOP | Graphics.LEFT);
     }
 }

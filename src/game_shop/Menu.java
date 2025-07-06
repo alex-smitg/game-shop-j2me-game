@@ -1,6 +1,7 @@
 package game_shop;
 
 import java.util.Vector;
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
 public class Menu extends View {
@@ -15,20 +16,22 @@ public class Menu extends View {
     }
 
     void keyPressed(int keyCode) {
-        if (keyCode == KEY_DOWN) {
-            selected_index++;
-            if (selected_index >= items.size()) {
-               selected_index = 0;
+        if (hasFocus) {
+            if (keyCode == Keys.KEY_DOWN) {
+                selected_index++;
+                if (selected_index >= items.size()) {
+                    selected_index = 0;
+                }
             }
-        }
-        if (keyCode == KEY_UP) {
-            selected_index--;
-            if (selected_index <= -1) {
-                selected_index = items.size() - 1;
+            if (keyCode == Keys.KEY_UP) {
+                selected_index--;
+                if (selected_index <= -1) {
+                    selected_index = items.size() - 1;
+                }
             }
         }
     }
-    
+
     MenuItem select() {
         return (MenuItem) items.elementAt(selected_index);
     }
@@ -36,16 +39,29 @@ public class Menu extends View {
     void update() {
 
     }
+    
+    void removeAllItems() {
+        items.removeAllElements();
+    }
 
-    void draw(Graphics g, Images images) {
+    void draw(Graphics g, Images images, Font font) {
         for (int i = 0; i < items.size(); i++) {
             g.setColor(255, 255, 255);
             if (i == selected_index) {
                 g.setColor(255, 255, 0);
             }
             
-            g.drawString(String.valueOf(i) + " : "
-                    + String.valueOf(((MenuItem) items.elementAt(i)).text),
+            MenuItem menuItem = (MenuItem) items.elementAt(i);
+            
+            String priceText = "";
+            if (menuItem.price != 0) {
+                priceText += String.valueOf(menuItem.price) + "$";
+            }
+            String text = menuItem.text + " " + priceText;
+            
+            
+                    
+            g.drawString(text,
                     (int) position.x, (int) position.y + i * gap,
                     Graphics.TOP | Graphics.LEFT);
         }

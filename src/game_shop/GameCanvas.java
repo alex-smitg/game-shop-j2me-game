@@ -12,32 +12,16 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
 
     private final Main main;
     private Images images = new Images();
-    
+
     private int last_clicked = 0;
 
+    ActionsMenu actionsMenu = new ActionsMenu(this);
     
-   
-    Menu buildMenu = new Menu();
-    
-    void populateMenu () {
-        buildMenu.addItem(
-                new MenuItem("Back")
-        );
-        buildMenu.addItem(
-                new MenuItem("Expand")
-        );
-        buildMenu.addItem(
-                new MenuItem("What")
-        );
-        buildMenu.addItem(
-                new MenuItem("Omg")
-        );
-    }
-    
-    World world = new World(getWidth(), getHeight());
+    World world = new World(getWidth(), getHeight(), this);
     
     
-    
+    Vector views = new Vector();
+
     Font font = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
 
     public GameCanvas(Main main) {
@@ -45,45 +29,69 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
         setFullScreenMode(true);
         this.main = main;
         main.initGame();
-        world.hasFocus = false;
-        buildMenu.hasFocus = true;
         
-        populateMenu();
+        world.hasFocus = true;
+        actionsMenu.visible = false;
+        
+        //DRAWING ORDER
+        views.addElement(world);
+        views.addElement(actionsMenu);
     }
+    
+    
+    
+    
+    void changeFocusTo(View view) {
+        for (int i = 0; i < views.size(); i++) {
+            View _view = (View) views.elementAt(i);
+            _view.hasFocus = false;
+        }
+        view.hasFocus = true;
+    } 
 
     protected void keyPressed(int keyCode) {
-        last_clicked = keyCode;
-        world.keyPressed(keyCode);
-        buildMenu.keyPressed(keyCode);
+        last_clicked = keyCode;            
+        
+        for (int i = 0; i < views.size(); i++) {
+            View view = (View) views.elementAt(i);
+            view.keyPressed(keyCode);
+        }
+        
+
     }
 
-    
-
-
     public void updateGame() {
-        world.update();
+        for (int i = 0; i < views.size(); i++) {
+            View view = (View) views.elementAt(i);
+            view.update();
+        }
     }
 
     public void paint(Graphics g) {
         g.setColor(0x000000);
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        world.draw(g, images);
-
+        g.setFont(font);
         
+        
+        for (int i = 0; i < views.size(); i++) {
+            View view = (View) views.elementAt(i);
+            view.draw(g, images, font);
+        }
 
         g.setColor(0, 0, 0);
         g.fillRect(UP, UP, getWidth(), 20);
-        g.setFont(font);
+        
+        
         g.setColor(255, 255, 0);
-        //g.drawString("Money: " + String.valueOf(game.money) + "$",
-        //0, 0, Graphics.TOP | Graphics.LEFT);     
-        g.drawString(String.valueOf(last_clicked),
-                10, 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(String.valueOf(world.money) + "$",
+                    0, 0,
+                    Graphics.TOP | Graphics.LEFT);
+        
+        
+        //g.drawString(String.valueOf(last_clicked),
+               // 10, 100, Graphics.TOP | Graphics.LEFT);
 
         g.setColor(0, 0, 0);
-        
-        buildMenu.draw(g, images);
 
     }
 

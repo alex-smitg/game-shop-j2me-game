@@ -10,5 +10,5 @@ package game_shop;
  * @author Admin
  */
 public class Prices {
-
+    static int expand = 200;
 }
