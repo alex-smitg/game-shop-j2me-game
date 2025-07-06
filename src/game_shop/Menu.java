@@ -10,6 +10,7 @@ public class Menu extends View {
     Vector items = new Vector();
     int gap = 25;
     Vector2d position = new Vector2d(0, 0);
+    View parent;
 
     void addItem(MenuItem menuItem) {
         items.addElement(menuItem);
@@ -46,9 +47,9 @@ public class Menu extends View {
 
     void draw(Graphics g, Images images, Font font) {
         for (int i = 0; i < items.size(); i++) {
-            g.setColor(0, 255, 0);
+            g.setColor(255, 255, 255);
             if (i == selected_index) {
-                //g.setColor(255, 255, 0);
+                g.setColor(0, 255, 0);
             }
 
             MenuItem menuItem = (MenuItem) items.elementAt(i);
@@ -56,7 +57,7 @@ public class Menu extends View {
             String priceText = "";
             if (menuItem.price != 0) {
                 priceText += String.valueOf(menuItem.price) + "$";
-                g.setColor(menuItem.color[0], menuItem.color[1], menuItem.color[2]);
+          
             }
             String text = menuItem.text + " " + priceText;
 

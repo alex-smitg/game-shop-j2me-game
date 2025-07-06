@@ -12,8 +12,8 @@ public class World extends View {
     private final Random random = new Random();
     private final Camera camera;
 
-    final int CELL_WIDTH = 48;
-    final int CELL_HEIGHT = 24;
+    final int CELL_WIDTH = 64;
+    final int CELL_HEIGHT = 32;
     final int CELL_HALF_WIDTH = CELL_WIDTH / 2;
     final int CELL_HALF_HEIGHT = CELL_HEIGHT / 2;
 
@@ -29,23 +29,22 @@ public class World extends View {
                 height / 2 - CELL_HALF_HEIGHT)
         );
 
-        for (int x = 0; x < 0; x++) {
-            for (int y = 0; y < 0; y++) {
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
                 Cell cell = new Cell();
                 cell.position.x = x * CELL_WIDTH;
                 cell.position.y = y * CELL_HEIGHT;
                 cells.addElement(cell);
 
-                cells_map.put(String.valueOf(x * CELL_WIDTH) +
-                        "|" + String.valueOf(y * CELL_HEIGHT), cell);
-                cell.type = Types.CHECKOUT;
+                cells_map.put(String.valueOf(x * CELL_WIDTH)
+                        + "|" + String.valueOf(y * CELL_HEIGHT), cell);
                 cell = new Cell();
                 cell.position.x = x * CELL_WIDTH + CELL_HALF_WIDTH;
                 cell.position.y = y * CELL_HEIGHT + CELL_HALF_HEIGHT;
 
-                cells_map.put(String.valueOf(x * CELL_WIDTH + CELL_HALF_WIDTH) +
-                        "|" +
-                        String.valueOf(y * CELL_HEIGHT + CELL_HALF_HEIGHT), cell);
+                cells_map.put(String.valueOf(x * CELL_WIDTH + CELL_HALF_WIDTH)
+                        + "|"
+                        + String.valueOf(y * CELL_HEIGHT + CELL_HALF_HEIGHT), cell);
                 cells.addElement(cell);
 
             }
@@ -77,6 +76,10 @@ public class World extends View {
             case Actions.BUILD_CHECKOUT:
                 substractMoney(Prices.build_checkout);
                 getCell().type = Types.CHECKOUT;
+                break;
+            case Actions.BUILD_SHELF:
+                substractMoney(Prices.build_shelf);
+                getCell().type = Types.SHELF;
                 break;
 
         }
@@ -170,6 +173,10 @@ public class World extends View {
                         cell.position.y - camera.getPosition().y),
                         CELL_HEIGHT
                 );
+                cell.drawProgress(g, new Vector2d(
+                        cell.position.x - camera.getPosition().x,
+                        cell.position.y - camera.getPosition().y),
+                        CELL_WIDTH, CELL_HEIGHT);
 
             }
 

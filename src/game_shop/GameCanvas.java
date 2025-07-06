@@ -92,6 +92,8 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
                // 10, 100, Graphics.TOP | Graphics.LEFT);
 
         g.setColor(0, 0, 0);
+    
+
 
     }
 

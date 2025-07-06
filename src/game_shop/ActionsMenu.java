@@ -42,10 +42,10 @@ public class ActionsMenu extends View {
 
                     menu.addItem(new MenuItem("Построить кассу",
                             Actions.BUILD_CHECKOUT,
-                            Prices.expand));
+                            Prices.build_checkout));
                     menu.addItem(new MenuItem("Построить полку",
                             Actions.BUILD_SHELF,
-                            Prices.expand));
+                            Prices.build_shelf));
                     break;
             }
         }
@@ -82,18 +82,7 @@ public class ActionsMenu extends View {
 
     void update() {
         menu.hasFocus = hasFocus;
-        for (int i = 0; i < menu.items.size(); i++) {
-            MenuItem menuItem = (MenuItem) menu.items.elementAt(i);
-            if (parent.world.hasEnoughMoney(menuItem.price)) {
-                menuItem.color[0] = 0;
-                menuItem.color[1] = 255;
-                menuItem.color[2] = 0;
-            } else {
-                menuItem.color[0] = 255;
-                menuItem.color[1] = 0;
-                menuItem.color[2] = 0;
-            }
-        }
+        
         menu.update();
     }
 

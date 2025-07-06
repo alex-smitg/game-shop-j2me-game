@@ -9,6 +9,7 @@ public class Images {
     Image cell_selector;
     Image arrow_right;
     Image checkout;
+    Image shelf_0;
 
     Images() {
         try {
@@ -16,6 +17,7 @@ public class Images {
             this.cell_selector = Image.createImage("/images/cursor.png");
             this.arrow_right = Image.createImage("/images/arrow.png");
             this.checkout = Image.createImage("/images/checkout.png");
+            this.shelf_0 = Image.createImage("/images/shelf.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
