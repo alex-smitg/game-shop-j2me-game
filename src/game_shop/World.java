@@ -127,12 +127,18 @@ public class World extends View {
                 cell.type = Types.SHELF;
                 cell.value_max = 3;
                 break;
-//            case Actions.BUY_GAMES:
-//                substractMoney(Prices.buy_games);
-//                cell = getCell();
-//                cell.value_max = 3;
-//                cell.value = cell.value_max; 
-//                break;
+            case Actions.CHANGE_CELL_COLOR_TO_GRASS:
+                cell = getCell();
+                cell.style = CellStyles.GRASS;
+                break;
+            case Actions.CHANGE_CELL_COLOR_TO_TILES:
+                cell = getCell();
+                cell.style = CellStyles.TILES;
+                break;
+            case Actions.BUILD_FLOWERPOT:
+                cell = getCell();
+                substractMoney(Prices.build_flowerpot, cursor_position_index);
+                cell.type = Types.FLOWERPOT;
 
         }
     }

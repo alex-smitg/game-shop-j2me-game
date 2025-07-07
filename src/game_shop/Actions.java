@@ -9,6 +9,7 @@ public class Actions {
     static final int BUILD_CHECKOUT = 2;
     static final int BUILD_SHELF = 3;
     static final int BUY_GAMES = 4;
-    
-    
+    static final int CHANGE_CELL_COLOR_TO_GRASS = 5;
+    static final int CHANGE_CELL_COLOR_TO_TILES = 6;
+    static final int BUILD_FLOWERPOT = 7;
 }

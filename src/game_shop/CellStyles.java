@@ -9,12 +9,7 @@ package game_shop;
  *
  * @author Admin
  */
-public class Prices {
-    static int expand = 200;
-    static int build_checkout = 40;
-    static int build_shelf = 80;
-    static int game = 20;
-    static int build_flowerpot = 10;
-    
-    static float sale_multipler = 2.5f;
+public class CellStyles {
+    static final int TILES = 0;
+    static final int GRASS = 1;
 }

@@ -35,6 +35,7 @@ public class ActionsMenu extends View {
                     Prices.expand));
         } else {
             switch (selectedCell.type) {
+                
                 case Types.EMPTY:
                     text_name = "Свободное место";
                     description.addElement("Здесь можно");
@@ -46,6 +47,9 @@ public class ActionsMenu extends View {
                     menu.addItem(new MenuItem("Построить полку",
                             Actions.BUILD_SHELF,
                             Prices.build_shelf));
+                     menu.addItem(new MenuItem("Построить растение",
+                            Actions.BUILD_FLOWERPOT,
+                            Prices.build_flowerpot));
                     break;
                 case Types.SHELF:
                     text_name = "Полка";
@@ -55,6 +59,12 @@ public class ActionsMenu extends View {
 //                            Actions.BUY_GAMES,
 //                            Prices.buy_games));
             }
+             menu.addItem(new MenuItem("Изменить цвет: Травяной",
+                            Actions.CHANGE_CELL_COLOR_TO_GRASS,
+                            0));
+            menu.addItem(new MenuItem("Изменить цвет: Плитка",
+                            Actions.CHANGE_CELL_COLOR_TO_TILES,
+                            0));
         }
 
         menu.position = new Vector2d(20, description.size() * 30 + 50);

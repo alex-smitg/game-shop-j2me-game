@@ -6,6 +6,7 @@ import javax.microedition.lcdui.Image;
 public class Images {
 
     Image cell_0;
+    Image cell_0_grass;
     Image cell_selector;
     Image arrow_right;
     Image checkout;
@@ -15,11 +16,13 @@ public class Images {
     Image smile_happy;
     Image smile_normal;
     Image smile_angry;
+    Image flower_pot;
    
 
     Images() {
         try {
             this.cell_0 = Image.createImage("/images/cell.png");
+            this.cell_0_grass = Image.createImage("/images/grass.png");
             this.cell_selector = Image.createImage("/images/cursor.png");
             this.arrow_right = Image.createImage("/images/arrow.png");
             this.checkout = Image.createImage("/images/checkout.png");
@@ -29,6 +32,7 @@ public class Images {
             this.smile_happy =  Image.createImage("/images/happy.png");
             this.smile_normal =  Image.createImage("/images/normal.png");
             this.smile_angry =  Image.createImage("/images/angry.png");
+             this.flower_pot =  Image.createImage("/images/flowerpot.png");
         } catch (IOException e) {
             e.printStackTrace();
         }

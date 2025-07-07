@@ -9,6 +9,8 @@ public class Cell {
     int value = 0;
     int value_max = 0;
 
+    int style = CellStyles.TILES;
+    
     int type = Types.EMPTY;
 
     int waitTime = 0;
@@ -103,9 +105,20 @@ public class Cell {
     }
 
     void drawFloor(Graphics g, Images images, Vector2d position) {
-        g.drawImage(images.cell_0,
+        switch (style) {
+            case CellStyles.GRASS:
+                g.drawImage(images.cell_0_grass,
                 (int) position.x, (int) position.y,
                 Graphics.TOP | Graphics.LEFT);
+                break;
+            case CellStyles.TILES:
+                g.drawImage(images.cell_0,
+                (int) position.x, (int) position.y,
+                Graphics.TOP | Graphics.LEFT);
+                break;
+        }
+        
+        
     }
 
     void draw(Graphics g, Images images, Vector2d position, int cell_height) {
@@ -132,6 +145,11 @@ public class Cell {
                             (int) position.x, (int) position.y - cell_height * 2,
                             Graphics.TOP | Graphics.LEFT);
                 }
+                break;
+            case Types.FLOWERPOT:
+                g.drawImage(images.flower_pot,
+                            (int) position.x, (int) position.y - cell_height * 2,
+                            Graphics.TOP | Graphics.LEFT);
                 break;
         }
     }
