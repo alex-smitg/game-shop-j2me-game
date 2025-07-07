@@ -37,26 +37,26 @@ public class World extends View {
                 height / 2 - CELL_HALF_HEIGHT)
         );
 
-        for (int x = 0; x < 3; x++) {
-            for (int y = 0; y < 3; y++) {
-                Cell cell = new Cell();
-                cell.position.x = x * CELL_WIDTH;
-                cell.position.y = y * CELL_HEIGHT;
-                cells.addElement(cell);
-
-                cells_map.put(String.valueOf(x * CELL_WIDTH)
-                        + "|" + String.valueOf(y * CELL_HEIGHT), cell);
-                cell = new Cell();
-                cell.position.x = x * CELL_WIDTH + CELL_HALF_WIDTH;
-                cell.position.y = y * CELL_HEIGHT + CELL_HALF_HEIGHT;
-
-                cells_map.put(String.valueOf(x * CELL_WIDTH + CELL_HALF_WIDTH)
-                        + "|"
-                        + String.valueOf(y * CELL_HEIGHT + CELL_HALF_HEIGHT), cell);
-                cells.addElement(cell);
-
-            }
-        }
+//        for (int x = 0; x < 3; x++) {
+//            for (int y = 0; y < 3; y++) {
+//                Cell cell = new Cell();
+//                cell.position.x = x * CELL_WIDTH;
+//                cell.position.y = y * CELL_HEIGHT;
+//                cells.addElement(cell);
+//
+//                cells_map.put(String.valueOf(x * CELL_WIDTH)
+//                        + "|" + String.valueOf(y * CELL_HEIGHT), cell);
+//                cell = new Cell();
+//                cell.position.x = x * CELL_WIDTH + CELL_HALF_WIDTH;
+//                cell.position.y = y * CELL_HEIGHT + CELL_HALF_HEIGHT;
+//
+//                cells_map.put(String.valueOf(x * CELL_WIDTH + CELL_HALF_WIDTH)
+//                        + "|"
+//                        + String.valueOf(y * CELL_HEIGHT + CELL_HALF_HEIGHT), cell);
+//                cells.addElement(cell);
+//
+//            }
+//        }
     }
 
     void substractMoney(int val, Vector2d cursorPosition) {
@@ -101,6 +101,9 @@ public class World extends View {
         switch (action) {
             case Actions.EXPAND:
                 substractMoney(Prices.expand, cursor_position_index);
+                
+                Objectives.expand_shop++;
+                
 
                 Cell cell = new Cell();
                 cell.position.x = (int) (cursor_position_index.x * CELL_HALF_WIDTH);
@@ -120,12 +123,14 @@ public class World extends View {
                 cell = getCell();
                 cell.type = Types.CHECKOUT;
                 cell.value_max = 1;
+                Objectives.checkouts++;
                 break;
             case Actions.BUILD_SHELF:
                 substractMoney(Prices.build_shelf, cursor_position_index);
                 cell = getCell();
                 cell.type = Types.SHELF;
                 cell.value_max = 3;
+                Objectives.shelves++;
                 break;
             case Actions.CHANGE_CELL_COLOR_TO_GRASS:
                 cell = getCell();
@@ -139,6 +144,28 @@ public class World extends View {
                 cell = getCell();
                 substractMoney(Prices.build_flowerpot, cursor_position_index);
                 cell.type = Types.FLOWERPOT;
+                Data.pots++;
+                break;
+            case Actions.DEMOLISH:
+                cell = getCell();
+                if (cell.type == Types.FLOWERPOT) {
+                    Data.pots--;
+                } 
+                if (cell.type == Types.CHECKOUT) {
+                    Objectives.checkouts--;
+                }
+                if (cell.type == Types.SHELF) {
+                    Objectives.shelves--;
+                }
+                cell.type = Types.EMPTY;
+                break;
+            case Actions.UPGRADE_SHELF_TO_LVL_2:
+                cell = getCell();
+                substractMoney((int) (Prices.build_shelf*Prices.upgrade_multiplier),
+                        cursor_position_index);
+                cell.level = 1;
+                cell.value_max = 9;
+                break;
 
         }
     }
@@ -192,6 +219,13 @@ public class World extends View {
                                         * (cell.value_max - cell.value),
                                         cursor_position_index);
                                 cell.fill();
+                                if (Objectives.shelf_filling_completed == false
+                                        && Objectives.checkout_and_shelves_completed) {
+                                    Objectives.shelf_filling_completed = true;
+                                    parent.dialog.jumpToNextItem();
+                                    parent.changeFocusTo(parent.dialog);
+                                }
+                                
 
                             }
                             break;
@@ -199,7 +233,7 @@ public class World extends View {
                         case Types.CHECKOUT:
                             if (cell.value > 0) {
                                 addMoney((int) (Prices.game
-                                        * Prices.sale_multipler),
+                                        * (Prices.sale_multipler+Data.pots*0.05f)),
                                         cursor_position_index);
                                 cell.value -= 1;
                             }

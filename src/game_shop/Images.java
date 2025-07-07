@@ -17,7 +17,10 @@ public class Images {
     Image smile_normal;
     Image smile_angry;
     Image flower_pot;
-   
+    Image shelf_1;
+    Image shelf_1_empty;
+    Image arrow_down;
+    Image fox;
 
     Images() {
         try {
@@ -33,6 +36,10 @@ public class Images {
             this.smile_normal =  Image.createImage("/images/normal.png");
             this.smile_angry =  Image.createImage("/images/angry.png");
              this.flower_pot =  Image.createImage("/images/flowerpot.png");
+             this.shelf_1 =  Image.createImage("/images/shelf_1.png");
+             this.shelf_1_empty =  Image.createImage("/images/shelf_1_empty.png");
+              this.arrow_down =  Image.createImage("/images/arrow_down.png");
+              this.fox = Image.createImage("/images/fox.png");
         } catch (IOException e) {
             e.printStackTrace();
         }

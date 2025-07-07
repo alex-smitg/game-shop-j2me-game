@@ -12,4 +12,7 @@ public class Actions {
     static final int CHANGE_CELL_COLOR_TO_GRASS = 5;
     static final int CHANGE_CELL_COLOR_TO_TILES = 6;
     static final int BUILD_FLOWERPOT = 7;
+    static final int UPGRADE_SHELF_TO_LVL_2 = 8;
+    static final int DEMOLISH = 9;
+    static final int HIRE = 10;
 }

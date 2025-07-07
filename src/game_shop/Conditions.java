@@ -9,7 +9,7 @@ package game_shop;
  *
  * @author Admin
  */
-public class Data {
-    static int max_clients = 1;
-    static int pots = 0;
+public class Conditions {
+    static final int NULL = 0;
+    static final int CELLS_BUILT = 1;
 }

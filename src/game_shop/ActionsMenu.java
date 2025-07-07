@@ -34,8 +34,12 @@ public class ActionsMenu extends View {
             menu.addItem(new MenuItem("Разрушить стену", Actions.EXPAND,
                     Prices.expand));
         } else {
+            if (selectedCell.type != Types.EMPTY) {
+                menu.addItem(new MenuItem("Снести", Actions.DEMOLISH,
+                        0));
+            }
             switch (selectedCell.type) {
-                
+
                 case Types.EMPTY:
                     text_name = "Свободное место";
                     description.addElement("Здесь можно");
@@ -47,24 +51,33 @@ public class ActionsMenu extends View {
                     menu.addItem(new MenuItem("Построить полку",
                             Actions.BUILD_SHELF,
                             Prices.build_shelf));
-                     menu.addItem(new MenuItem("Построить растение",
+                    menu.addItem(new MenuItem("Построить растение",
                             Actions.BUILD_FLOWERPOT,
                             Prices.build_flowerpot));
                     break;
                 case Types.SHELF:
-                    text_name = "Полка";
+                    text_name = "Полка (Уровень " +
+                            String.valueOf(selectedCell.level + 1) + ")";
                     description.addElement("Полка с играми");
-                    
-//                    menu.addItem(new MenuItem("Купить игр",
-//                            Actions.BUY_GAMES,
-//                            Prices.buy_games));
+
+                    if (selectedCell.level == 0)  {
+                    menu.addItem(new MenuItem("Улучшить полку до 2LVL",
+                            Actions.UPGRADE_SHELF_TO_LVL_2,
+                            (int) (Prices.build_shelf * Prices.upgrade_multiplier)));
+                    }
+                    break;
+                case Types.FLOWERPOT:
+                    text_name = "Растение";
+                    description.addElement("Увеличивает множитель");
+                    description.addElement("продажи игр на 0.05");
+                    break;
             }
-             menu.addItem(new MenuItem("Изменить цвет: Травяной",
-                            Actions.CHANGE_CELL_COLOR_TO_GRASS,
-                            0));
+            menu.addItem(new MenuItem("Изменить цвет: Травяной",
+                    Actions.CHANGE_CELL_COLOR_TO_GRASS,
+                    0));
             menu.addItem(new MenuItem("Изменить цвет: Плитка",
-                            Actions.CHANGE_CELL_COLOR_TO_TILES,
-                            0));
+                    Actions.CHANGE_CELL_COLOR_TO_TILES,
+                    0));
         }
 
         menu.position = new Vector2d(20, description.size() * 30 + 50);
@@ -74,6 +87,22 @@ public class ActionsMenu extends View {
 
     void goBack() {
         parent.changeFocusTo(parent.world);
+
+        //objectives 
+        if (Objectives.expand_shop == 2
+                && !Objectives.expand_completed) {
+            parent.dialog.jumpToNextItem();
+            parent.changeFocusTo(parent.dialog);
+            Objectives.expand_completed = true;
+        }
+
+        if (Objectives.shelves >= 1 
+                && Objectives.checkouts >= 1 &&
+                !Objectives.checkout_and_shelves_completed) {
+            parent.dialog.jumpToNextItem();
+            parent.changeFocusTo(parent.dialog);
+            Objectives.checkout_and_shelves_completed = true;
+        }
         parent.world.show();
         hide();
     }
@@ -99,7 +128,7 @@ public class ActionsMenu extends View {
 
     void update() {
         menu.hasFocus = hasFocus;
-        
+
         menu.update();
     }
 

@@ -17,4 +17,5 @@ public class Prices {
     static int build_flowerpot = 10;
     
     static float sale_multipler = 2.5f;
+    static float upgrade_multiplier = 4.0f;
 }

@@ -21,7 +21,9 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
 
     Vector views = new Vector();
 
-    Font font = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
+    Font font = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_SMALL);
+    
+    Dialog dialog = new Dialog(this, font, getWidth());
 
     public GameCanvas(Main main) {
         super(false);
@@ -29,12 +31,15 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
         this.main = main;
         main.initGame();
 
-        world.hasFocus = true;
+        dialog.hasFocus = true;
+        world.hasFocus = false;
         actionsMenu.visible = false;
 
         //DRAWING ORDER
+       
         views.addElement(world);
         views.addElement(actionsMenu);
+        views.addElement(dialog);
     }
 
     void changeFocusTo(View view) {
