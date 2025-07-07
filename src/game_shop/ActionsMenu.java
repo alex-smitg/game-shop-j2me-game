@@ -47,6 +47,13 @@ public class ActionsMenu extends View {
                             Actions.BUILD_SHELF,
                             Prices.build_shelf));
                     break;
+                case Types.SHELF:
+                    text_name = "Полка";
+                    description.addElement("Полка с играми");
+                    
+//                    menu.addItem(new MenuItem("Купить игр",
+//                            Actions.BUY_GAMES,
+//                            Prices.buy_games));
             }
         }
 

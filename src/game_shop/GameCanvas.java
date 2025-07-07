@@ -16,10 +16,9 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     private int last_clicked = 0;
 
     ActionsMenu actionsMenu = new ActionsMenu(this);
-    
+
     World world = new World(getWidth(), getHeight(), this);
-    
-    
+
     Vector views = new Vector();
 
     Font font = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM);
@@ -29,34 +28,30 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
         setFullScreenMode(true);
         this.main = main;
         main.initGame();
-        
+
         world.hasFocus = true;
         actionsMenu.visible = false;
-        
+
         //DRAWING ORDER
         views.addElement(world);
         views.addElement(actionsMenu);
     }
-    
-    
-    
-    
+
     void changeFocusTo(View view) {
         for (int i = 0; i < views.size(); i++) {
             View _view = (View) views.elementAt(i);
             _view.hasFocus = false;
         }
         view.hasFocus = true;
-    } 
+    }
 
     protected void keyPressed(int keyCode) {
-        last_clicked = keyCode;            
-        
+        last_clicked = keyCode;
+
         for (int i = 0; i < views.size(); i++) {
             View view = (View) views.elementAt(i);
             view.keyPressed(keyCode);
         }
-        
 
     }
 
@@ -71,8 +66,7 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
         g.setColor(0x000000);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setFont(font);
-        
-        
+
         for (int i = 0; i < views.size(); i++) {
             View view = (View) views.elementAt(i);
             view.draw(g, images, font);
@@ -80,20 +74,25 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
 
         g.setColor(0, 0, 0);
         g.fillRect(UP, UP, getWidth(), 20);
-        
-        
+
         g.setColor(255, 255, 0);
         g.drawString(String.valueOf(world.money) + "$",
-                    0, 0,
-                    Graphics.TOP | Graphics.LEFT);
+                0, 0,
+                Graphics.TOP | Graphics.LEFT);
+
+        g.setColor(255, 255, 255);
         
+        String text = String.valueOf(world.current_clients) + "/"
+                + String.valueOf(Data.max_clients);
         
+        g.drawString(text, getWidth() - 
+                font.charsWidth(text.toCharArray(),
+                        0, text.length()) , 0,
+                Graphics.TOP | Graphics.LEFT);
+
         //g.drawString(String.valueOf(last_clicked),
-               // 10, 100, Graphics.TOP | Graphics.LEFT);
-
+        // 10, 100, Graphics.TOP | Graphics.LEFT);
         g.setColor(0, 0, 0);
-    
-
 
     }
 

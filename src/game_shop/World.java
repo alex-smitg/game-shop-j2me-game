@@ -17,8 +17,16 @@ public class World extends View {
     final int CELL_HALF_WIDTH = CELL_WIDTH / 2;
     final int CELL_HALF_HEIGHT = CELL_HEIGHT / 2;
 
+    int updateTime = 0;
+    int time = 0;
+    int timeSpeed = 60;
+
     Vector cells = new Vector();
     Hashtable cells_map = new Hashtable();
+
+    Vector floatingTexts = new Vector();
+
+    int current_clients = 0;
 
     int money = 800;
 
@@ -51,14 +59,48 @@ public class World extends View {
         }
     }
 
-    void substractMoney(int val) {
+    void substractMoney(int val, Vector2d cursorPosition) {
         money -= val;
+
+        String text = "-" + String.valueOf(val) + "$";
+
+        Vector2d position = new Vector2d(
+                cursorPosition.x * CELL_HALF_WIDTH + CELL_HALF_WIDTH,
+                cursorPosition.y * CELL_HALF_HEIGHT
+        );
+
+        int[] color = {255, 0, 0};
+        FloatingText floatingText = new FloatingText(position,
+                60,
+                text,
+                color
+        );
+        floatingTexts.addElement(floatingText);
+    }
+
+    void addMoney(int val, Vector2d cursorPosition) {
+        money += val;
+
+        String text = "+" + String.valueOf(val) + "$";
+
+        Vector2d position = new Vector2d(
+                cursorPosition.x * CELL_HALF_WIDTH + CELL_HALF_WIDTH,
+                cursorPosition.y * CELL_HALF_HEIGHT
+        );
+
+        int[] color = {0, 255, 0};
+        FloatingText floatingText = new FloatingText(position,
+                60,
+                text,
+                color
+        );
+        floatingTexts.addElement(floatingText);
     }
 
     void receiveAction(int action) {
         switch (action) {
             case Actions.EXPAND:
-                substractMoney(Prices.expand);
+                substractMoney(Prices.expand, cursor_position_index);
 
                 Cell cell = new Cell();
                 cell.position.x = (int) (cursor_position_index.x * CELL_HALF_WIDTH);
@@ -74,13 +116,23 @@ public class World extends View {
 
                 break;
             case Actions.BUILD_CHECKOUT:
-                substractMoney(Prices.build_checkout);
-                getCell().type = Types.CHECKOUT;
+                substractMoney(Prices.build_checkout, cursor_position_index);
+                cell = getCell();
+                cell.type = Types.CHECKOUT;
+                cell.value_max = 1;
                 break;
             case Actions.BUILD_SHELF:
-                substractMoney(Prices.build_shelf);
-                getCell().type = Types.SHELF;
+                substractMoney(Prices.build_shelf, cursor_position_index);
+                cell = getCell();
+                cell.type = Types.SHELF;
+                cell.value_max = 3;
                 break;
+//            case Actions.BUY_GAMES:
+//                substractMoney(Prices.buy_games);
+//                cell = getCell();
+//                cell.value_max = 3;
+//                cell.value = cell.value_max; 
+//                break;
 
         }
     }
@@ -122,6 +174,57 @@ public class World extends View {
                 parent.actionsMenu.show();
             }
 
+            if (keyCode == Keys.KEY_CENTER) {
+                Cell cell = getCell();
+                if (cell != null) {
+                    switch (cell.type) {
+                        case Types.SHELF:
+                            if (hasEnoughMoney(Prices.game
+                                    * (cell.value_max - cell.value))) {
+
+                                substractMoney(Prices.game
+                                        * (cell.value_max - cell.value),
+                                        cursor_position_index);
+                                cell.fill();
+
+                            }
+                            break;
+
+                        case Types.CHECKOUT:
+                            if (cell.value > 0) {
+                                addMoney((int) (Prices.game
+                                        * Prices.sale_multipler),
+                                        cursor_position_index);
+                                cell.value -= 1;
+                            }
+                            break;
+                    }
+                }
+            }
+
+        }
+    }
+
+    void updateCells() {
+        for (int i = 0; i < cells.size(); i++) {
+            Cell cell = (Cell) cells.elementAt(i);
+
+            if (current_clients > 0) {
+                if (cell.type == Types.CHECKOUT) {
+                    if (cell.value < cell.value_max) {
+                        cell.value += 1;
+                        current_clients -= 1;
+                        cell.waitTime = cell.maxWaitTime;
+                    }
+                }
+            }
+
+            int ret = cell.updateOnce(current_clients);
+
+            switch (ret) {
+                case CellReturns.CLIENT_PICKED_GAME:
+                    current_clients++;
+            }
         }
     }
 
@@ -144,6 +247,19 @@ public class World extends View {
                 (int) cursor_position_index.x * CELL_HALF_WIDTH,
                 (int) cursor_position_index.y * CELL_HALF_HEIGHT)
         );
+
+        updateTime += 1;
+
+        for (int i = 0; i < cells.size(); i++) {
+            Cell cell = (Cell) cells.elementAt(i);
+            cell.updateEveryFrame();
+        }
+
+        if (updateTime >= timeSpeed) {
+            updateTime = 0;
+            updateCells();
+        }
+
         camera.update();
     }
 
@@ -178,6 +294,25 @@ public class World extends View {
                         cell.position.y - camera.getPosition().y),
                         CELL_WIDTH, CELL_HEIGHT);
 
+                cell.drawStatus(g, new Vector2d(
+                        cell.position.x - camera.getPosition().x,
+                        cell.position.y - camera.getPosition().y),
+                        images,
+                        CELL_WIDTH, CELL_HEIGHT);
+
+            }
+
+            for (int i = 0; i < floatingTexts.size(); i++) {
+                FloatingText floatingText = (FloatingText) floatingTexts.elementAt(i);
+                floatingText.update();
+                floatingText.draw(g, font, camera.getPosition());
+            }
+
+            for (int i = floatingTexts.size() - 1; i >= 0; i--) {
+                FloatingText floatingText = (FloatingText) floatingTexts.elementAt(i);
+                if (floatingText.liveTime <= 0) {
+                    floatingTexts.removeElementAt(i);
+                }
             }
 
         }

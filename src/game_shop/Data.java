@@ -9,11 +9,6 @@ package game_shop;
  *
  * @author Admin
  */
-public class Prices {
-    static int expand = 200;
-    static int build_checkout = 40;
-    static int build_shelf = 80;
-    static int game = 20;
-    
-    static float sale_multipler = 2.5f;
+public class Data {
+    static int max_clients = 1;
 }

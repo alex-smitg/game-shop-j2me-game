@@ -34,7 +34,9 @@ public class Menu extends View {
     }
 
     MenuItem select() {
-        return (MenuItem) items.elementAt(selected_index);
+        int temp = selected_index;
+        selected_index = 0;
+        return (MenuItem) items.elementAt(temp);     
     }
 
     void update() {
