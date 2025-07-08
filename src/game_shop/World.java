@@ -291,7 +291,7 @@ public class World extends View {
                     current_clients++;
                     break;
                 case CellReturns.VENDING_MACHINE:
-                    addMoney(3, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
+                    addMoney(5, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
                             cell.position.y / CELL_HALF_HEIGHT));
                     break;
                 case CellReturns.SERVED:

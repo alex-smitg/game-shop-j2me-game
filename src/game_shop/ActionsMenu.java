@@ -93,7 +93,7 @@ public class ActionsMenu extends View {
                     break;
                 case Types.VENDING_MACHINE:
                     text_name = "Торговый автомат";
-                    description.addElement("Приносит пассивный доход 3$");
+                    description.addElement("Приносит пассивный доход 5$");
                     break;
             }
             menu.addItem(new MenuItem("Изменить цвет: Травяной",
