@@ -19,7 +19,7 @@ public class World extends View {
 
     int updateTime = 0;
     int time = 0;
-    int timeSpeed = 60;
+    int timeSpeed = 80;
 
     Vector cells = new Vector();
     Hashtable cells_map = new Hashtable();
@@ -28,7 +28,7 @@ public class World extends View {
 
     int current_clients = 0;
 
-    int money = 800;
+    int money = 1800;
 
     World(int width, int height, GameCanvas gameCanvas) {
         this.parent = gameCanvas;
@@ -71,7 +71,7 @@ public class World extends View {
 
         int[] color = {255, 0, 0};
         FloatingText floatingText = new FloatingText(position,
-                60,
+                40,
                 text,
                 color
         );
@@ -90,7 +90,7 @@ public class World extends View {
 
         int[] color = {0, 255, 0};
         FloatingText floatingText = new FloatingText(position,
-                60,
+                40,
                 text,
                 color
         );
@@ -101,9 +101,8 @@ public class World extends View {
         switch (action) {
             case Actions.EXPAND:
                 substractMoney(Prices.expand, cursor_position_index);
-                
+
                 Objectives.expand_shop++;
-                
 
                 Cell cell = new Cell();
                 cell.position.x = (int) (cursor_position_index.x * CELL_HALF_WIDTH);
@@ -150,7 +149,7 @@ public class World extends View {
                 cell = getCell();
                 if (cell.type == Types.FLOWERPOT) {
                     Data.pots--;
-                } 
+                }
                 if (cell.type == Types.CHECKOUT) {
                     Objectives.checkouts--;
                 }
@@ -161,12 +160,23 @@ public class World extends View {
                 break;
             case Actions.UPGRADE_SHELF_TO_LVL_2:
                 cell = getCell();
-                substractMoney((int) (Prices.build_shelf*Prices.upgrade_multiplier),
+                substractMoney((int) (Prices.build_shelf * Prices.upgrade_multiplier),
                         cursor_position_index);
                 cell.level = 1;
                 cell.value_max = 9;
                 break;
-
+            case Actions.BUILD_VENDING_MACHINE:
+                cell = getCell();
+                substractMoney((int) Prices.build_vending_machine,
+                        cursor_position_index);
+                cell.type = Types.VENDING_MACHINE;
+                break;
+            case Actions.UPGRADE_CHECKOUT_TO_LVL2:
+                cell = getCell();
+                substractMoney((int) Prices.build_vending_machine,
+                        cursor_position_index);
+                cell.level++;
+                cell.value_max += 1;
         }
     }
 
@@ -225,7 +235,6 @@ public class World extends View {
                                     parent.dialog.jumpToNextItem();
                                     parent.changeFocusTo(parent.dialog);
                                 }
-                                
 
                             }
                             break;
@@ -233,9 +242,16 @@ public class World extends View {
                         case Types.CHECKOUT:
                             if (cell.value > 0) {
                                 addMoney((int) (Prices.game
-                                        * (Prices.sale_multipler+Data.pots*0.05f)),
+                                        * (Prices.sale_multipler + Data.pots * 0.1f)),
                                         cursor_position_index);
                                 cell.value -= 1;
+
+                                if (Objectives.serving_completed == false
+                                        && Objectives.shelf_filling_completed) {
+                                    Objectives.serving_completed = true;
+                                    parent.dialog.jumpToNextItem();
+                                    parent.changeFocusTo(parent.dialog);
+                                }
                             }
                             break;
                     }
@@ -264,6 +280,18 @@ public class World extends View {
             switch (ret) {
                 case CellReturns.CLIENT_PICKED_GAME:
                     current_clients++;
+                    break;
+                case CellReturns.VENDING_MACHINE:
+                    addMoney(1, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
+                            cell.position.y / CELL_HALF_HEIGHT));
+                    break;
+                case CellReturns.SERVED: 
+                    addMoney((int) (Prices.game * cell.value
+                                        * (Prices.sale_multipler + Data.pots * 0.1f)),
+                                        new Vector2d(cell.position.x / CELL_HALF_WIDTH,
+                            cell.position.y / CELL_HALF_HEIGHT));
+                                cell.value = 0;
+                    break;
             }
         }
     }

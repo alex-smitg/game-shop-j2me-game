@@ -57,9 +57,12 @@ public class Dialog extends View {
                 + " (Нажми кнопку ОК чтобы продолжить)",
                 Conditions.NULL, false));
         items.addElement(new DialogItem(
-                "В нашем магазине, еще нет места, давай разрушим 2 стены."
-                + " Чтобы зайти в меню строительства, нажми левую кнопку действия" +
-                        ". Выбери разрушить стену стрелочками и нажми кнопку ОК",
+                "В нашем магазине, еще нет места, давай разрушим 2 стены.",
+                Conditions.NULL, false));
+        
+        items.addElement(new DialogItem(
+        "Зайди в меню строительства (левая кнопка действия)" +
+                        ". Выбери разрушить стену и нажми кнопку ОК",
                 Conditions.NULL, true));
         
         items.addElement(new DialogItem(
@@ -86,6 +89,10 @@ public class Dialog extends View {
                         ". Если посетитель будет ждать слишком долго, то он уйдет"
                  + " не заплатив", 
                 Conditions.NULL, true));
+          items.addElement(new DialogItem(
+                "Хорошо! Думаю теперь ты готов к суровой жизни хозяина магазина. " +
+                       "Ладно, я пойду. Пока набери 3000$",
+                Conditions.NULL, true));
 
     }
 
@@ -104,6 +111,10 @@ public class Dialog extends View {
             itemIndex++;
             current_line_index = 0;
             canGoNext = false;
+            
+            
+            
+            //canGoNext = true; jumpToNextItem(); //skip all dialog;
         }
     }
 

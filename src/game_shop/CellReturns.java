@@ -12,4 +12,6 @@ package game_shop;
 public class CellReturns {
     static final int NONE = -1;
     static final int CLIENT_PICKED_GAME = 0;
+    static final int VENDING_MACHINE = 1;
+    static final int SERVED = 2;
 }

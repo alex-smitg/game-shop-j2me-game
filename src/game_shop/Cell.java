@@ -16,6 +16,9 @@ public class Cell {
     int waitTime = 0;
     int maxWaitTime = 300;
 
+    int autoWait = 0;
+    int autoWaitMax = 3;
+
     int level = 0;
 
     void fill() {
@@ -31,6 +34,7 @@ public class Cell {
 
             }
         }
+
         if (waitTime > 0) {
             waitTime -= 1;
         }
@@ -38,11 +42,23 @@ public class Cell {
     }
 
     int updateOnce(int current_clients) {
+        autoWait++;
         if (type == Types.SHELF && current_clients == 0) {
             if (value > 0) {
                 value -= 1;
                 return CellReturns.CLIENT_PICKED_GAME;
             }
+        }
+        if (type == Types.CHECKOUT) {
+            if (level > 0 && value > 0 && autoWait >= autoWaitMax) {
+                autoWait = 0;
+                return CellReturns.SERVED;
+
+            }
+        }
+
+        if (type == Types.VENDING_MACHINE) {
+            return CellReturns.VENDING_MACHINE;
         }
 
         return CellReturns.NONE;
@@ -126,14 +142,26 @@ public class Cell {
 
         switch (type) {
             case Types.CHECKOUT:
-                if (value != 0) {
-                    g.drawImage(images.checkout,
-                            (int) position.x, (int) position.y - cell_height * 2,
-                            Graphics.TOP | Graphics.LEFT);
+                if (level == 0) {
+                    if (value != 0) {
+                        g.drawImage(images.checkout_0,
+                                (int) position.x, (int) position.y - cell_height * 2,
+                                Graphics.TOP | Graphics.LEFT);
+                    } else {
+                        g.drawImage(images.checkout_0_empty,
+                                (int) position.x, (int) position.y - cell_height * 2,
+                                Graphics.TOP | Graphics.LEFT);
+                    }
                 } else {
-                    g.drawImage(images.checkout_empty,
-                            (int) position.x, (int) position.y - cell_height * 2,
-                            Graphics.TOP | Graphics.LEFT);
+                    if (value != 0) {
+                        g.drawImage(images.checkout_1,
+                                (int) position.x, (int) position.y - cell_height * 2,
+                                Graphics.TOP | Graphics.LEFT);
+                    } else {
+                        g.drawImage(images.checkout_1_empty,
+                                (int) position.x, (int) position.y - cell_height * 2,
+                                Graphics.TOP | Graphics.LEFT);
+                    }
                 }
                 break;
             case Types.SHELF:
@@ -161,6 +189,11 @@ public class Cell {
                 break;
             case Types.FLOWERPOT:
                 g.drawImage(images.flower_pot,
+                        (int) position.x, (int) position.y - cell_height * 2,
+                        Graphics.TOP | Graphics.LEFT);
+                break;
+            case Types.VENDING_MACHINE:
+                g.drawImage(images.vending_machine,
                         (int) position.x, (int) position.y - cell_height * 2,
                         Graphics.TOP | Graphics.LEFT);
                 break;

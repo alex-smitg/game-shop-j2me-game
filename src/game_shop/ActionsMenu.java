@@ -54,22 +54,42 @@ public class ActionsMenu extends View {
                     menu.addItem(new MenuItem("Построить растение",
                             Actions.BUILD_FLOWERPOT,
                             Prices.build_flowerpot));
+                    menu.addItem(new MenuItem("Торговый автомат",
+                            Actions.BUILD_VENDING_MACHINE,
+                            Prices.build_vending_machine));
                     break;
                 case Types.SHELF:
-                    text_name = "Полка (Уровень " +
-                            String.valueOf(selectedCell.level + 1) + ")";
+                    text_name = "Полка (Уровень "
+                            + String.valueOf(selectedCell.level + 1) + ")";
                     description.addElement("Полка с играми");
 
-                    if (selectedCell.level == 0)  {
-                    menu.addItem(new MenuItem("Улучшить полку до 2LVL",
-                            Actions.UPGRADE_SHELF_TO_LVL_2,
-                            (int) (Prices.build_shelf * Prices.upgrade_multiplier)));
+                    if (selectedCell.level == 0) {
+                        menu.addItem(new MenuItem("Улучшить полку до 2LVL",
+                                Actions.UPGRADE_SHELF_TO_LVL_2,
+                                (int) (Prices.build_shelf * Prices.upgrade_multiplier)));
+                    }
+                    break;
+                case Types.CHECKOUT:
+                    text_name = "Касса (Уровень "
+                            + String.valueOf(selectedCell.level + 1) + ")";
+
+                    if (selectedCell.level == 0) {
+                        description.addElement("Простой стол и кассовый аппарат");
+                        menu.addItem(new MenuItem("Улучшить кассу до 2LVL",
+                                Actions.UPGRADE_CHECKOUT_TO_LVL2,
+                                (int) (Prices.build_checkout * Prices.upgrade_multiplier)));
+                    } else {
+                        description.addElement("Касса с сотрудником");
                     }
                     break;
                 case Types.FLOWERPOT:
                     text_name = "Растение";
                     description.addElement("Увеличивает множитель");
                     description.addElement("продажи игр на 0.05");
+                    break;
+                case Types.VENDING_MACHINE:
+                    text_name = "Торговый автомат";
+                    description.addElement("Приносит пассивный доход 1$");
                     break;
             }
             menu.addItem(new MenuItem("Изменить цвет: Травяной",
@@ -96,9 +116,9 @@ public class ActionsMenu extends View {
             Objectives.expand_completed = true;
         }
 
-        if (Objectives.shelves >= 1 
-                && Objectives.checkouts >= 1 &&
-                !Objectives.checkout_and_shelves_completed) {
+        if (Objectives.shelves >= 1
+                && Objectives.checkouts >= 1
+                && !Objectives.checkout_and_shelves_completed) {
             parent.dialog.jumpToNextItem();
             parent.changeFocusTo(parent.dialog);
             Objectives.checkout_and_shelves_completed = true;

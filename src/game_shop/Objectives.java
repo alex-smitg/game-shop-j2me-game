@@ -18,4 +18,5 @@ public class Objectives {
     static boolean shelf_filling_completed = false;
     static boolean expand_completed = false;
     static boolean checkout_and_shelves_completed = false;
+    static boolean serving_completed = false;
 }

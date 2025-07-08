@@ -10,11 +10,12 @@ package game_shop;
  * @author Admin
  */
 public class Prices {
-    static int expand = 200;
+    static int expand = 150;
     static int build_checkout = 40;
     static int build_shelf = 80;
     static int game = 20;
     static int build_flowerpot = 10;
+    static int build_vending_machine = 300;
     
     static float sale_multipler = 2.5f;
     static float upgrade_multiplier = 4.0f;
