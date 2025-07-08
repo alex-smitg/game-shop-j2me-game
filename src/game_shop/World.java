@@ -244,7 +244,7 @@ public class World extends View {
                         case Types.CHECKOUT:
                             if (cell.value > 0) {
                                 addMoney((int) (Prices.game
-                                        * (Prices.sale_multipler + Data.pots * 0.1f)),
+                                        * (Prices.sale_multipler + Data.pots * 0.3f)),
                                         cursor_position_index);
                                 cell.value -= 1;
 
@@ -291,12 +291,12 @@ public class World extends View {
                     current_clients++;
                     break;
                 case CellReturns.VENDING_MACHINE:
-                    addMoney(5, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
+                    addMoney(20, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
                             cell.position.y / CELL_HALF_HEIGHT));
                     break;
                 case CellReturns.SERVED:
                     addMoney((int) (Prices.game * cell.value
-                            * (Prices.sale_multipler + Data.pots * 0.1f)),
+                            * (Prices.sale_multipler + Data.pots * 0.3f)),
                             new Vector2d(cell.position.x / CELL_HALF_WIDTH,
                                     cell.position.y / CELL_HALF_HEIGHT));
                     cell.value = 0;

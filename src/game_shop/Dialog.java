@@ -81,7 +81,7 @@ public class Dialog extends View {
                 Conditions.NULL, true));
 
         items.addElement(new DialogItem(
-                "Затем посетитель берёт игру и встает в очередь (Число справо сверху). "
+                "Затем посетитель берёт игру и встает в очередь (Число справа сверху). "
                 + "Из этой очереди посетитель переходит на кассу",
                 Conditions.NULL, false));
 

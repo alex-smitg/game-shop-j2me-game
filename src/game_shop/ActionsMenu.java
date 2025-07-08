@@ -89,11 +89,11 @@ public class ActionsMenu extends View {
                 case Types.FLOWERPOT:
                     text_name = "Растение";
                     description.addElement("Увеличивает множитель");
-                    description.addElement("продажи игр на 0.05");
+                    description.addElement("продажи игр на 0.3");
                     break;
                 case Types.VENDING_MACHINE:
                     text_name = "Торговый автомат";
-                    description.addElement("Приносит пассивный доход 5$");
+                    description.addElement("Приносит пассивный доход 20$");
                     break;
             }
             menu.addItem(new MenuItem("Изменить цвет: Травяной",
