@@ -86,7 +86,7 @@ public class Dialog extends View {
                 Conditions.NULL, false));
 
         items.addElement(new DialogItem(
-                "Если очередь заполнена, то никто не будет брать игры",
+                "Если очередь заполнена, то никто не будет брать игры с полок",
                 Conditions.NULL, false));
 
         items.addElement(new DialogItem(
@@ -112,9 +112,7 @@ public class Dialog extends View {
                 Conditions.NULL, false));
 
         items.addElement(new DialogItem(
-                "Цель достигнута за " 
-                + String.valueOf((parent.currentTime - parent.startTime) / 1000)
-                + " секунд. На этом игра окончена.",
+                "На этом игра окончена.",
                 Conditions.NULL, true));
 
     }

@@ -63,7 +63,9 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     }
 
     public void updateGame() {
-        currentTime = System.currentTimeMillis();
+        if (!Objectives.money_goal_reached) {
+            currentTime = System.currentTimeMillis();
+        }
         for (int i = 0; i < views.size(); i++) {
             View view = (View) views.elementAt(i);
             view.update();

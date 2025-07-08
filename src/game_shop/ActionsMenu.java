@@ -63,6 +63,10 @@ public class ActionsMenu extends View {
                             + String.valueOf(selectedCell.level + 1) + ")";
                     description.addElement("Полка с играми");
 
+                    description.addElement("Цена заполнения: "
+                            + String.valueOf(Prices.game * (selectedCell.value_max)));
+
+
                     if (selectedCell.level == 0) {
                         menu.addItem(new MenuItem("Улучшить полку до 2LVL",
                                 Actions.UPGRADE_SHELF_TO_LVL_2,
@@ -89,7 +93,7 @@ public class ActionsMenu extends View {
                     break;
                 case Types.VENDING_MACHINE:
                     text_name = "Торговый автомат";
-                    description.addElement("Приносит пассивный доход 1$");
+                    description.addElement("Приносит пассивный доход 3$");
                     break;
             }
             menu.addItem(new MenuItem("Изменить цвет: Травяной",

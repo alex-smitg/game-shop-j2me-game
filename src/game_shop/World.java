@@ -19,7 +19,7 @@ public class World extends View {
 
     int updateTime = 0;
     int time = 0;
-    int timeSpeed = 80;
+    int timeSpeed = 70;
 
     Vector cells = new Vector();
     Hashtable cells_map = new Hashtable();
@@ -157,6 +157,7 @@ public class World extends View {
                     Objectives.shelves--;
                 }
                 cell.type = Types.EMPTY;
+                cell.level = 0;
                 break;
             case Actions.UPGRADE_SHELF_TO_LVL_2:
                 cell = getCell();
@@ -173,7 +174,7 @@ public class World extends View {
                 break;
             case Actions.UPGRADE_CHECKOUT_TO_LVL2:
                 cell = getCell();
-                substractMoney((int) Prices.build_vending_machine,
+                substractMoney((int) (Prices.build_checkout * Prices.upgrade_multiplier),
                         cursor_position_index);
                 cell.level++;
                 cell.value_max += 1;
@@ -279,6 +280,7 @@ public class World extends View {
                         current_clients -= 1;
                         cell.waitTime = cell.maxWaitTime;
                     }
+                    
                 }
             }
 
@@ -289,7 +291,7 @@ public class World extends View {
                     current_clients++;
                     break;
                 case CellReturns.VENDING_MACHINE:
-                    addMoney(1, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
+                    addMoney(3, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
                             cell.position.y / CELL_HALF_HEIGHT));
                     break;
                 case CellReturns.SERVED:

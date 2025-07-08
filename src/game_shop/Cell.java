@@ -99,10 +99,10 @@ public class Cell {
         if (type == Types.SHELF) {
             g.setColor(255, 255, 255);
 
-            g.drawString(String.valueOf(Prices.game * (3 * (level + 1))),
-                    (int) position.x + 5, (int) position.y + cell_width / 2
-                    - cell_width / 4 + 5,
-                    Graphics.TOP | Graphics.LEFT);
+//            g.drawString(String.valueOf(Prices.game * (3 * (level + 1))),
+//                    (int) position.x + 5, (int) position.y + cell_width / 2
+//                    - cell_width / 4 + 5,
+//                    Graphics.TOP | Graphics.LEFT);
         }
 
     }
