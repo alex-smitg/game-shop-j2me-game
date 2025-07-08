@@ -10,6 +10,5 @@ package game_shop;
  * @author Admin
  */
 public class Data {
-    static int max_clients = 1;
     static int pots = 0;
 }

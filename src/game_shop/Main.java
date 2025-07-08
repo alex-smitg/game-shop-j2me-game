@@ -14,6 +14,8 @@ public class Main extends javax.microedition.midlet.MIDlet implements Runnable {
     private Display display;
     private Thread gameThread;
     private boolean running;
+    
+    
 
     private javax.microedition.media.Player musicPlayer;
 

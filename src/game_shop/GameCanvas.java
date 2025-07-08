@@ -22,7 +22,10 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     Vector views = new Vector();
 
     Font font = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_SMALL);
-    
+
+    long startTime = System.currentTimeMillis();
+    long currentTime = startTime;
+
     Dialog dialog = new Dialog(this, font, getWidth());
 
     public GameCanvas(Main main) {
@@ -36,7 +39,6 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
         actionsMenu.visible = false;
 
         //DRAWING ORDER
-       
         views.addElement(world);
         views.addElement(actionsMenu);
         views.addElement(dialog);
@@ -61,6 +63,7 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     }
 
     public void updateGame() {
+        currentTime = System.currentTimeMillis();
         for (int i = 0; i < views.size(); i++) {
             View view = (View) views.elementAt(i);
             view.update();
@@ -71,11 +74,16 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
         g.setColor(0x000000);
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setFont(font);
+        
+        
 
         for (int i = 0; i < views.size(); i++) {
             View view = (View) views.elementAt(i);
             view.draw(g, images, font);
         }
+        
+        
+        
 
         g.setColor(0, 0, 0);
         g.fillRect(UP, UP, getWidth(), 20);
@@ -86,18 +94,26 @@ public class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
                 Graphics.TOP | Graphics.LEFT);
 
         g.setColor(255, 255, 255);
-        
+
         String text = String.valueOf(world.current_clients) + "/"
-                + String.valueOf(Data.max_clients);
-        
-        g.drawString(text, getWidth() - 
-                font.charsWidth(text.toCharArray(),
-                        0, text.length()) , 0,
+                + String.valueOf(world.maxClients);
+
+        g.drawString(text, getWidth()
+                - font.charsWidth(text.toCharArray(),
+                        0, text.length()), 0,
                 Graphics.TOP | Graphics.LEFT);
 
+        
+        g.setColor(0, 100, 255);
+
+        g.drawString(String.valueOf((currentTime-startTime)/1000),
+                getWidth() / 2, 0,
+                Graphics.TOP | Graphics.LEFT);
         //g.drawString(String.valueOf(last_clicked),
         // 10, 100, Graphics.TOP | Graphics.LEFT);
         g.setColor(0, 0, 0);
+        
+        
 
     }
 

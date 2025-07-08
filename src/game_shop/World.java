@@ -27,8 +27,8 @@ public class World extends View {
     Vector floatingTexts = new Vector();
 
     int current_clients = 0;
-
-    int money = 1800;
+    int maxClients = 0;
+    int money = 600;
 
     World(int width, int height, GameCanvas gameCanvas) {
         this.parent = gameCanvas;
@@ -223,7 +223,8 @@ public class World extends View {
                     switch (cell.type) {
                         case Types.SHELF:
                             if (hasEnoughMoney(Prices.game
-                                    * (cell.value_max - cell.value))) {
+                                    * (cell.value_max - cell.value))
+                                    && cell.value != cell.value_max) {
 
                                 substractMoney(Prices.game
                                         * (cell.value_max - cell.value),
@@ -262,11 +263,17 @@ public class World extends View {
     }
 
     void updateCells() {
+
         for (int i = 0; i < cells.size(); i++) {
             Cell cell = (Cell) cells.elementAt(i);
+            
+            
 
+            
             if (current_clients > 0) {
                 if (cell.type == Types.CHECKOUT) {
+                    
+                    
                     if (cell.value < cell.value_max) {
                         cell.value += 1;
                         current_clients -= 1;
@@ -275,7 +282,7 @@ public class World extends View {
                 }
             }
 
-            int ret = cell.updateOnce(current_clients);
+            int ret = cell.updateOnce(current_clients, maxClients);
 
             switch (ret) {
                 case CellReturns.CLIENT_PICKED_GAME:
@@ -285,12 +292,12 @@ public class World extends View {
                     addMoney(1, new Vector2d(cell.position.x / CELL_HALF_WIDTH,
                             cell.position.y / CELL_HALF_HEIGHT));
                     break;
-                case CellReturns.SERVED: 
+                case CellReturns.SERVED:
                     addMoney((int) (Prices.game * cell.value
-                                        * (Prices.sale_multipler + Data.pots * 0.1f)),
-                                        new Vector2d(cell.position.x / CELL_HALF_WIDTH,
-                            cell.position.y / CELL_HALF_HEIGHT));
-                                cell.value = 0;
+                            * (Prices.sale_multipler + Data.pots * 0.1f)),
+                            new Vector2d(cell.position.x / CELL_HALF_WIDTH,
+                                    cell.position.y / CELL_HALF_HEIGHT));
+                    cell.value = 0;
                     break;
             }
         }
@@ -311,16 +318,27 @@ public class World extends View {
     }
 
     void update() {
+        maxClients = 0;
         camera.setTargetPosition(new Vector2d(
                 (int) cursor_position_index.x * CELL_HALF_WIDTH,
                 (int) cursor_position_index.y * CELL_HALF_HEIGHT)
         );
+
+        if (money >= Objectives.MONEY_GOAL && !Objectives.money_goal_reached) {
+            Objectives.money_goal_reached = true;
+            parent.dialog.jumpToNextItem();
+            parent.changeFocusTo(parent.dialog);
+        }
 
         updateTime += 1;
 
         for (int i = 0; i < cells.size(); i++) {
             Cell cell = (Cell) cells.elementAt(i);
             cell.updateEveryFrame();
+            
+            if (cell.type == Types.CHECKOUT) {
+                maxClients += (cell.level + 1);
+            }
         }
 
         if (updateTime >= timeSpeed) {
@@ -361,7 +379,7 @@ public class World extends View {
                         cell.position.x - camera.getPosition().x,
                         cell.position.y - camera.getPosition().y),
                         CELL_WIDTH, CELL_HEIGHT);
-
+                
                 cell.drawStatus(g, new Vector2d(
                         cell.position.x - camera.getPosition().x,
                         cell.position.y - camera.getPosition().y),

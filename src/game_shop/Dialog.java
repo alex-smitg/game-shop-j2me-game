@@ -44,7 +44,7 @@ public class Dialog extends View {
     public Dialog(GameCanvas gameCanvas, Font font, int screenWidth) {
         this.font = font;
         this.parent = gameCanvas;
-        this.screenWidth = screenWidth - 69; 
+        this.screenWidth = screenWidth - 69;
         populate();
         jumpToNextItem();
 
@@ -59,39 +59,62 @@ public class Dialog extends View {
         items.addElement(new DialogItem(
                 "В нашем магазине, еще нет места, давай разрушим 2 стены.",
                 Conditions.NULL, false));
-        
+
         items.addElement(new DialogItem(
-        "Зайди в меню строительства (левая кнопка действия)" +
-                        ". Выбери разрушить стену и нажми кнопку ОК",
+                "Зайди в меню строительства (левая кнопка действия)"
+                + ". Выбери разрушить стену и нажми кнопку ОК",
                 Conditions.NULL, true));
-        
+
         items.addElement(new DialogItem(
                 "Отлично. Теперь построй полку и кассу",
                 Conditions.NULL, true));
-        
+
         items.addElement(new DialogItem(
                 "Давай теперь объясню как это работает",
                 Conditions.NULL, false));
-        
+
         items.addElement(new DialogItem(
-                "Первым делом нужно заполнить полку играми, это будет стоить " +
-                        String.valueOf(Prices.game * 3) + "$" + //3 is shelf first level max value
-                        ". Наведись на полку и нажми кнопку ОК", 
+                "Первым делом нужно заполнить полку играми, это будет стоить "
+                + String.valueOf(Prices.game * 3) + "$"
+                + //3 is shelf first level max value
+                ". Наведись на полку и нажми кнопку ОК",
                 Conditions.NULL, true));
-        
-         items.addElement(new DialogItem(
+
+        items.addElement(new DialogItem(
                 "Затем посетитель берёт игру и встает в очередь (Число справо сверху). "
-               + "Если очередь заполнена, то никто не будет брать игры" +
-                ". Из этой очереди посетитель переходит на кассу", 
+                + "Из этой очереди посетитель переходит на кассу",
                 Conditions.NULL, false));
-         items.addElement(new DialogItem(
-                "Для того чтобы обслужить посетителя, нажми кнопку ОК на кассе" +
-                        ". Если посетитель будет ждать слишком долго, то он уйдет"
-                 + " не заплатив", 
+
+        items.addElement(new DialogItem(
+                "Если очередь заполнена, то никто не будет брать игры",
+                Conditions.NULL, false));
+
+        items.addElement(new DialogItem(
+                "Для того чтобы обслужить посетителя, нажми кнопку ОК на кассе",
+                Conditions.NULL, false));
+
+        items.addElement(new DialogItem(
+                "Если посетитель будет ждать слишком долго, то он уйдет не заплатив",
                 Conditions.NULL, true));
-          items.addElement(new DialogItem(
-                "Хорошо! Думаю теперь ты готов к суровой жизни хозяина магазина. " +
-                       "Ладно, я пойду. Пока набери 3000$",
+
+        items.addElement(new DialogItem(
+                "Хорошо! Думаю теперь ты готов к суровой жизни хозяина магазина. ",
+                Conditions.NULL,
+                false));
+
+        items.addElement(new DialogItem(
+                "Ладно, я пойду. Пока набери "
+                + String.valueOf(Objectives.MONEY_GOAL) + "$",
+                Conditions.NULL, true));
+
+        items.addElement(new DialogItem(
+                "Молодец, ты справился. Теперь я смогу заплатить за учёбу.",
+                Conditions.NULL, false));
+
+        items.addElement(new DialogItem(
+                "Цель достигнута за " 
+                + String.valueOf((parent.currentTime - parent.startTime) / 1000)
+                + " секунд. На этом игра окончена.",
                 Conditions.NULL, true));
 
     }
@@ -111,9 +134,7 @@ public class Dialog extends View {
             itemIndex++;
             current_line_index = 0;
             canGoNext = false;
-            
-            
-            
+
             //canGoNext = true; jumpToNextItem(); //skip all dialog;
         }
     }
@@ -205,17 +226,16 @@ public class Dialog extends View {
 
             g.drawImage(images.arrow_down,
                     font.charsWidth(lastLine.toCharArray(), 0, lastLine.length())
-                    + images.fox.getWidth(),
+                    + images.fox.getWidth() + 5,
                     (current_lines.size() - 1) * font.getHeight() + g.getClipHeight()
                     - font.getHeight() * current_lines.size() - 15 + (int) arrow_pos,
                     Graphics.TOP | Graphics.LEFT);
         }
-        
-        
-         g.drawImage(images.fox,
-                   0,
-                   g.getClipHeight() - images.fox.getHeight(),
-                    Graphics.TOP | Graphics.LEFT);
+
+        g.drawImage(images.fox,
+                0,
+                g.getClipHeight() - images.fox.getHeight(),
+                Graphics.TOP | Graphics.LEFT);
 
     }
 

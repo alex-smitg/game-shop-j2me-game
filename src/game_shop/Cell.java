@@ -1,5 +1,6 @@
 package game_shop;
 
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
 public class Cell {
@@ -41,9 +42,9 @@ public class Cell {
 
     }
 
-    int updateOnce(int current_clients) {
+    int updateOnce(int current_clients, int maxClients) {
         autoWait++;
-        if (type == Types.SHELF && current_clients == 0) {
+        if (type == Types.SHELF && current_clients < maxClients) {
             if (value > 0) {
                 value -= 1;
                 return CellReturns.CLIENT_PICKED_GAME;
@@ -66,9 +67,9 @@ public class Cell {
 
     void drawStatus(Graphics g, Vector2d position, Images images,
             int cell_width, int cell_height) {
+        position.x = position.x + cell_width / 4 + 8;
+        position.y = position.y - cell_height / 2 + cell_height / 2;
         if (type == Types.CHECKOUT && value > 0) {
-            position.x = position.x + cell_width / 4 + 8;
-            position.y = position.y - cell_height / 2 + cell_height / 2;
 
             int n = maxWaitTime / 3;
 
@@ -93,6 +94,15 @@ public class Cell {
                         Graphics.TOP | Graphics.LEFT);
             }
 
+        }
+
+        if (type == Types.SHELF) {
+            g.setColor(255, 255, 255);
+
+            g.drawString(String.valueOf(Prices.game * (3 * (level + 1))),
+                    (int) position.x + 5, (int) position.y + cell_width / 2
+                    - cell_width / 4 + 5,
+                    Graphics.TOP | Graphics.LEFT);
         }
 
     }

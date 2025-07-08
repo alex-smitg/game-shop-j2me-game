@@ -15,8 +15,11 @@ public class Objectives {
     static int checkouts = 0;
     static int shelves = 0;
     
+    static final int MONEY_GOAL = 5000;
+    
     static boolean shelf_filling_completed = false;
     static boolean expand_completed = false;
     static boolean checkout_and_shelves_completed = false;
     static boolean serving_completed = false;
+    static boolean money_goal_reached = false;
 }
