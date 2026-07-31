@@ -1,16 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package game_shop;
 
-/**
- *
- * @author Admin
- */
-public class Keys {
+public final class Keys {
+    private Keys() {}
+    
     final static int KEY_LEFT = -3;
     final static int KEY_RIGHT = -4;
     final static int KEY_UP = -1;
